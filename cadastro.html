@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f7f8f6">
+  <title>Cadastrar achado — Achei!</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="admin-page">
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="Achei! Página inicial"><span class="brand-mark">a<span>!</span></span><span>Achei<span class="brand-dot">.</span></span></a>
+    <nav class="main-nav" aria-label="Navegação principal"><a class="nav-link" href="index.html">Ver achados</a><a class="nav-link active" href="gerenciar.html">Gerenciar</a></nav>
+    <div class="staff-profile"><span class="staff-avatar">C</span><span><strong>Carlos Mendes</strong><small>Equipe administrativa</small></span><span class="profile-chevron">⌄</span></div>
+  </header>
+  <main class="admin-main">
+    <div class="admin-breadcrumb"><a href="gerenciar.html">Gerenciar achados</a><span>/</span><span>Novo cadastro</span></div>
+    <div class="admin-heading"><div><span class="eyebrow">ÁREA DA EQUIPE</span><h1>Cadastrar um achado</h1><p>Preencha os detalhes para ajudar alguém a encontrar o que perdeu.</p></div><a class="button button-outline" href="gerenciar.html">Cancelar</a></div>
+    <div class="form-layout">
+      <form class="item-form" action="gerenciar.html">
+        <section class="form-section">
+          <div class="form-section-heading"><span class="form-step">01</span><div><h2>Sobre o objeto</h2><p>As informações ajudam a identificar o item.</p></div></div>
+          <div class="form-fields">
+            <label class="form-control full-width">Nome do objeto <span class="required">*</span><input type="text" name="nome" placeholder="Ex.: Guarda-chuva preto" required><small>Use um nome simples e fácil de reconhecer.</small></label>
+            <label class="form-control">Categoria <span class="required">*</span><select name="categoria" required><option value="" disabled selected>Selecione uma categoria</option><option>Eletrônicos</option><option>Acessórios</option><option>Material escolar</option><option>Outros</option></select></label>
+            <label class="form-control">Data em que foi encontrado <span class="required">*</span><input type="date" name="data" value="2026-11-13" required></label>
+            <label class="form-control full-width">Descrição <span class="required">*</span><textarea name="descricao" rows="4" placeholder="Cor, tamanho, marca, detalhes que ajudem a identificar..." required></textarea><small>Evite incluir nomes ou outras informações pessoais.</small></label>
+          </div>
+        </section>
+        <section class="form-section location-section">
+          <div class="form-section-heading"><span class="form-step">02</span><div><h2>Onde foi encontrado?</h2><p>Ajude a pessoa a entender onde deixou o objeto.</p></div></div>
+          <div class="form-fields">
+            <label class="form-control">Local <span class="required">*</span><select name="local" required><option value="" disabled selected>Selecione o local</option><option>Biblioteca central</option><option>Bloco de aulas A</option><option>Bloco de aulas B</option><option>Cantina</option><option>Ginásio</option><option>Outro</option></select></label>
+            <label class="form-control">Complemento <span class="optional">(opcional)</span><input type="text" name="complemento" placeholder="Ex.: 1º andar, sala 12"></label>
+          </div>
+        </section>
+        <section class="form-section">
+          <div class="form-section-heading"><span class="form-step">03</span><div><h2>Foto do objeto</h2><p>Uma foto ajuda a pessoa a reconhecer o achado.</p></div></div>
+          <label class="upload-box"><span class="upload-icon">↑</span><span><strong>Adicionar uma foto</strong><small>JPG ou PNG · até 5 MB</small></span><input type="file" accept="image/png,image/jpeg" aria-label="Adicionar uma foto do objeto"></label>
+          <p class="upload-privacy">Antes de publicar, confira se a imagem não mostra informações pessoais.</p>
+        </section>
+        <div class="form-actions"><span><span class="required">*</span> Campos obrigatórios</span><button class="button button-primary" type="submit">Publicar achado <span aria-hidden="true">→</span></button></div>
+      </form>
+      <aside class="form-aside">
+        <div class="aside-card"><span class="aside-illustration">✳</span><h3>Um cuidado que ajuda</h3><p>Descreva o objeto sem revelar todos os detalhes. Assim, a pessoa pode confirmar que é dela na hora da retirada.</p><div class="aside-example"><span class="example-good">✓</span><span>“Chaveiro de tecido azul com 3 chaves.”</span></div><div class="aside-example"><span class="example-no">×</span><span>Não inclua nome, telefone ou matrícula.</span></div></div>
+        <div class="aside-tip"><span>♧</span><p>Os dados cadastrados ficam visíveis para a comunidade da instituição.</p></div>
+      </aside>
+    </div>
+  </main>
+  <footer class="site-footer"><a class="brand brand-footer" href="index.html"><span class="brand-mark">a<span>!</span></span><span>Achei<span class="brand-dot">.</span></span></a><span>Feito para cuidar do que importa. <span class="footer-heart">♥</span></span><a href="index.html">Voltar ao site ↗</a></footer>
+</body>
+</html>

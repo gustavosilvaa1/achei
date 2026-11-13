@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f7f8f6">
+  <title>Gerenciar achados — Achei!</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="admin-page">
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="Achei! Página inicial"><span class="brand-mark">a<span>!</span></span><span>Achei<span class="brand-dot">.</span></span></a>
+    <nav class="main-nav" aria-label="Navegação principal"><a class="nav-link" href="index.html">Ver achados</a><a class="nav-link active" href="gerenciar.html">Gerenciar</a></nav>
+    <div class="staff-profile"><span class="staff-avatar">C</span><span><strong>Carlos Mendes</strong><small>Equipe administrativa</small></span><span class="profile-chevron">⌄</span></div>
+  </header>
+  <main class="admin-main manage-main">
+    <div class="admin-heading manage-heading"><div><span class="eyebrow">ÁREA DA EQUIPE</span><h1>Achados cadastrados</h1><p>Acompanhe e mantenha os objetos encontrados atualizados.</p></div><a class="button button-primary" href="cadastro.html"><span aria-hidden="true">＋</span> Cadastrar achado</a></div>
+    <section class="stat-row" aria-label="Resumo dos achados"><div class="stat-card"><span class="stat-icon stat-green">◉</span><div><span>DISPONÍVEIS</span><strong>12</strong></div><small>+3 esta semana</small></div><div class="stat-card"><span class="stat-icon stat-blue">✓</span><div><span>DEVOLVIDOS</span><strong>28</strong></div><small>neste semestre</small></div><div class="stat-card"><span class="stat-icon stat-yellow">◷</span><div><span>CADASTRADOS HOJE</span><strong>3</strong></div><small>último às 10:42</small></div></section>
+    <section class="manage-panel">
+      <div class="manage-panel-heading"><div><h2>Todos os registros <span class="table-count">12</span></h2><p>Edite as informações ou atualize o status do objeto.</p></div><label class="table-search"><span class="search-icon" aria-hidden="true"></span><span class="sr-only">Pesquisar nos registros</span><input type="search" placeholder="Buscar objeto..."></label></div>
+      <div class="table-filters"><a class="filter-tab active" href="#registros">Todos <span>12</span></a><a class="filter-tab" href="#registros">Disponíveis <span>12</span></a><a class="filter-tab" href="#registros">Devolvidos <span>28</span></a><span class="filter-sort">Ordenar: <strong>Mais recentes⌄</strong></span></div>
+      <div class="table-scroll" id="registros"><table class="records-table"><thead><tr><th>OBJETO</th><th>CATEGORIA</th><th>LOCAL ENCONTRADO</th><th>DATA</th><th>STATUS</th><th><span class="sr-only">Ações</span></th></tr></thead><tbody>
+        <tr><td><span class="table-object-emoji">🎒</span><span class="table-object-name">Mochila azul-marinho<small>#ACH-0248</small></span></td><td>Material escolar</td><td>Biblioteca central</td><td>Hoje, 10:42</td><td><span class="table-status"><i></i> Disponível</span></td><td><div class="row-actions"><a class="row-action" href="cadastro.html" aria-label="Editar Mochila azul-marinho">Editar</a><a class="row-action row-delete" href="#confirmar-exclusao" aria-label="Excluir Mochila azul-marinho">Excluir</a></div></td></tr>
+        <tr><td><span class="table-object-emoji">🎧</span><span class="table-object-name">Fone de ouvido branco<small>#ACH-0247</small></span></td><td>Eletrônicos</td><td>Bloco de aulas B</td><td>Hoje, 09:18</td><td><span class="table-status"><i></i> Disponível</span></td><td><div class="row-actions"><a class="row-action" href="cadastro.html" aria-label="Editar Fone de ouvido branco">Editar</a><a class="row-action row-delete" href="#confirmar-exclusao" aria-label="Excluir Fone de ouvido branco">Excluir</a></div></td></tr>
+        <tr><td><span class="table-object-emoji">🔑</span><span class="table-object-name">Chaveiro com duas chaves<small>#ACH-0246</small></span></td><td>Acessórios</td><td>Próximo à cantina</td><td>12 nov, 16:05</td><td><span class="table-status"><i></i> Disponível</span></td><td><div class="row-actions"><a class="row-action" href="cadastro.html" aria-label="Editar Chaveiro com duas chaves">Editar</a><a class="row-action row-delete" href="#confirmar-exclusao" aria-label="Excluir Chaveiro com duas chaves">Excluir</a></div></td></tr>
+        <tr><td><span class="table-object-emoji">🥤</span><span class="table-object-name">Garrafa térmica verde<small>#ACH-0245</small></span></td><td>Outros</td><td>Ginásio</td><td>12 nov, 14:32</td><td><span class="table-status"><i></i> Disponível</span></td><td><div class="row-actions"><a class="row-action" href="cadastro.html" aria-label="Editar Garrafa térmica verde">Editar</a><a class="row-action row-delete" href="#confirmar-exclusao" aria-label="Excluir Garrafa térmica verde">Excluir</a></div></td></tr>
+        <tr><td><span class="table-object-emoji">👓</span><span class="table-object-name">Óculos de grau<small>#ACH-0244</small></span></td><td>Acessórios</td><td>Bloco de aulas A</td><td>11 nov, 17:20</td><td><span class="table-status"><i></i> Disponível</span></td><td><div class="row-actions"><a class="row-action" href="cadastro.html" aria-label="Editar Óculos de grau">Editar</a><a class="row-action row-delete" href="#confirmar-exclusao" aria-label="Excluir Óculos de grau">Excluir</a></div></td></tr>
+      </tbody></table></div>
+      <div class="table-footer"><span>Mostrando <strong>5</strong> de <strong>12</strong> registros</span><div class="pagination"><button aria-label="Página anterior" type="button">←</button><button class="current-page" type="button">1</button><button type="button">2</button><button type="button">3</button><button aria-label="Próxima página" type="button">→</button></div></div>
+    </section>
+    <div class="manage-help"><span>✳</span><p>Quando um objeto for retirado, atualize o status para manter a lista em dia.</p></div>
+    <section class="confirm-overlay" id="confirmar-exclusao" role="dialog" aria-modal="true" aria-labelledby="confirm-title">
+      <div class="confirm-dialog"><span class="confirm-warning">!</span><h2 id="confirm-title">Excluir este achado?</h2><p>Essa ação remove o registro da lista de objetos encontrados. Não será possível desfazê-la.</p><div class="confirm-actions"><a class="button button-outline" href="#registros">Cancelar</a><a class="button button-danger" href="#registros">Confirmar exclusão</a></div></div>
+    </section>
+  </main>
+  <footer class="site-footer"><a class="brand brand-footer" href="index.html"><span class="brand-mark">a<span>!</span></span><span>Achei<span class="brand-dot">.</span></span></a><span>Feito para cuidar do que importa. <span class="footer-heart">♥</span></span><a href="index.html">Voltar ao site ↗</a></footer>
+</body>
+</html>
