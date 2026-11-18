@@ -11,13 +11,13 @@
   <header class="site-header">
     <a class="brand" href="index.html" aria-label="Achei! Página inicial"><span class="brand-mark">a<span>!</span></span><span>Achei<span class="brand-dot">.</span></span></a>
     <nav class="main-nav" aria-label="Navegação principal"><a class="nav-link" href="index.html">Ver achados</a><a class="nav-link active" href="gerenciar.html">Gerenciar</a></nav>
-    <div class="staff-profile"><span class="staff-avatar">C</span><span><strong>Carlos Mendes</strong><small>Equipe administrativa</small></span><span class="profile-chevron">⌄</span></div>
+    <div class="staff-profile"><span class="staff-avatar" id="staff-avatar">E</span><span><strong id="staff-name">Equipe</strong><small id="staff-role">Área administrativa</small></span><button class="row-action" id="logout" type="button" hidden>Sair</button></div>
   </header>
   <main class="admin-main">
     <div class="admin-breadcrumb"><a href="gerenciar.html">Gerenciar achados</a><span>/</span><span>Novo cadastro</span></div>
     <div class="admin-heading"><div><span class="eyebrow">ÁREA DA EQUIPE</span><h1>Cadastrar um achado</h1><p>Preencha os detalhes para ajudar alguém a encontrar o que perdeu.</p></div><a class="button button-outline" href="gerenciar.html">Cancelar</a></div>
     <div class="form-layout">
-      <form class="item-form" action="gerenciar.html">
+      <form class="item-form" id="cadastro-achado" action="gerenciar.html">
         <section class="form-section">
           <div class="form-section-heading"><span class="form-step">01</span><div><h2>Sobre o objeto</h2><p>As informações ajudam a identificar o item.</p></div></div>
           <div class="form-fields">
@@ -36,7 +36,7 @@
         </section>
         <section class="form-section">
           <div class="form-section-heading"><span class="form-step">03</span><div><h2>Foto do objeto</h2><p>Uma foto ajuda a pessoa a reconhecer o achado.</p></div></div>
-          <label class="upload-box"><span class="upload-icon">↑</span><span><strong>Adicionar uma foto</strong><small>JPG ou PNG · até 5 MB</small></span><input type="file" accept="image/png,image/jpeg" aria-label="Adicionar uma foto do objeto"></label>
+          <label class="upload-box"><span class="upload-icon">↑</span><span><strong>Adicionar uma foto</strong><small id="foto-nome">JPG ou PNG · até 5 MB</small></span><input type="file" name="foto" accept="image/png,image/jpeg" aria-label="Adicionar uma foto do objeto"></label>
           <p class="upload-privacy">Antes de publicar, confira se a imagem não mostra informações pessoais.</p>
         </section>
         <div class="form-actions"><span><span class="required">*</span> Campos obrigatórios</span><button class="button button-primary" type="submit">Publicar achado <span aria-hidden="true">→</span></button></div>
@@ -48,5 +48,6 @@
     </div>
   </main>
   <footer class="site-footer"><a class="brand brand-footer" href="index.html"><span class="brand-mark">a<span>!</span></span><span>Achei<span class="brand-dot">.</span></span></a><span>Feito para cuidar do que importa. <span class="footer-heart">♥</span></span><a href="index.html">Voltar ao site ↗</a></footer>
+    <script type="module" src="/src/app.js"></script>
 </body>
 </html>

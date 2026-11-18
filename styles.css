@@ -15,6 +15,7 @@
 }
 
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 body { margin: 0; background: var(--canvas); color: var(--ink); font-size: 14px; -webkit-font-smoothing: antialiased; }
 a { color: inherit; text-decoration: none; }
 button, input, select, textarea { font: inherit; }
@@ -95,6 +96,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .object-card { display: block; border: 1px solid #eaede8; border-radius: 10px; overflow: hidden; background: white; transition: transform .18s,box-shadow .18s; }
 .object-card:hover { transform: translateY(-3px); box-shadow: 0 10px 26px #1e3a2c11; }
 .object-photo { height: 156px; position: relative; display: grid; place-items: center; overflow: hidden; }
+.object-photo-image { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .object-photo:before,.detail-photo:before { content: ''; position: absolute; width: 175px; height: 175px; border: 1px solid #ffffff75; border-radius: 50%; right: -42px; top: -60px; }
 .photo-backpack { background: linear-gradient(145deg,#dce8df,#bfd4c6); }.photo-earbuds { background: linear-gradient(145deg,#e9e2d9,#d4caba); }.photo-keys { background: linear-gradient(145deg,#eee7d9,#dbceb4); }.photo-bottle { background: linear-gradient(145deg,#dce8e7,#bcd4d0); }
 .photo-backpack:after,.photo-earbuds:after,.photo-keys:after,.photo-bottle:after { content: ''; position: absolute; width: 102px; height: 102px; border-radius: 50%; background: #ffffff34; }
@@ -118,6 +120,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .back-link { display: inline-flex; align-items: center; gap: 9px; color: #77837c; font-size: 12px; margin-bottom: 25px; }.back-link:first-letter { color: var(--green); }
 .detail-layout { display: grid; grid-template-columns: 1.04fr .96fr; gap: 64px; align-items: start; }
 .detail-photo { height: 390px; border-radius: 14px; display: grid; place-items: center; position: relative; overflow: hidden; background: linear-gradient(145deg,#dce8df,#b9d1c2); }
+.detail-image { position: relative; z-index: 1; width: 100%; height: 100%; object-fit: cover; }
 .detail-photo:before { width: 360px; height: 360px; right: -55px; top: -120px; border-width: 1px; }
 .detail-photo:after { content: ''; position: absolute; width: 245px; height: 245px; border-radius: 50%; background: #ffffff40; }
 .detail-emoji { position: relative; z-index: 1; font-size: 156px; filter: drop-shadow(0 17px 12px #20372a32); transform: rotate(-6deg); }
@@ -135,6 +138,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 /* Staff screens */
 .admin-page { background: #f7f8f6; }.admin-page .site-header { padding-left: max(calc((100vw - 1120px) / 2), 6%); padding-right: max(calc((100vw - 1120px) / 2), 6%); }
 .staff-profile { display: flex; align-items: center; gap: 9px; }.staff-avatar { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; background: #e8f0e9; color: #477a59; font-weight: 700; font-size: 12px; }.staff-profile strong,.staff-profile small { display: block; }.staff-profile strong { font-size: 10px; }.staff-profile small { color: #8c9790; font-size: 9px; margin-top: 3px; }.profile-chevron { color: #77857d; margin-left: 4px; }
+.auth-panel { max-width: 520px; margin: 30px auto; padding: 24px; border: 1px solid #e8ebe6; border-radius: 11px; background: white; }.auth-panel h2 { margin: 0 0 7px; font: 700 18px 'Manrope',sans-serif; }.auth-panel > p { margin: 0 0 20px; color: #7d8981; font-size: 12px; }.auth-form { display: grid; gap: 14px; }.auth-form .form-control input { min-height: 42px; font-size: 12px; }.auth-form .button { justify-self: start; }.auth-error { max-width: 520px; margin: 20px auto; padding: 13px 15px; border: 1px solid #f0d7cf; border-radius: 8px; background: #fbefeb; color: #9f503a; font-size: 12px; line-height: 1.6; }
 .admin-main { max-width: 1080px; margin: 0 auto; padding: 30px 0 50px; }.admin-breadcrumb { display: flex; gap: 10px; color: #99a19b; font-size: 10px; margin-bottom: 23px; }.admin-breadcrumb a { color: #607068; }.admin-heading { display: flex; align-items: end; justify-content: space-between; margin-bottom: 26px; }.admin-heading .eyebrow { font-size: 9px; }.admin-heading h1 { margin: 6px 0; font: 800 28px 'Manrope',sans-serif; letter-spacing: -1px; }.admin-heading p { margin: 0; color: #7d8981; font-size: 12px; }.admin-heading > .button { min-width: 95px; }
 .form-layout { display: grid; grid-template-columns: minmax(0,1fr) 270px; align-items: start; gap: 22px; }.item-form { background: white; border: 1px solid #e8ebe6; border-radius: 11px; padding: 0 25px; }
 .form-section { padding: 22px 0 24px; border-bottom: 1px solid #edf0ec; }.form-section:last-of-type { border-bottom: 0; }.form-section-heading { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 19px; }.form-step { width: 27px; height: 27px; flex: 0 0 27px; display: grid; place-items: center; border-radius: 8px; color: #49805e; background: #edf4ed; font-size: 9px; font-weight: 700; }.form-section-heading h2 { margin: 1px 0 4px; font: 700 13px 'Manrope',sans-serif; }.form-section-heading p { margin: 0; color: #8b968f; font-size: 10px; }.form-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 15px 14px; padding-left: 39px; }.form-control { display: flex; flex-direction: column; gap: 7px; color: #536159; font-size: 10px; font-weight: 600; }.form-control.full-width { grid-column: 1 / -1; }.required { color: #c97b55; }.optional { color: #9ba49e; font-weight: 400; }.form-control input,.form-control select,.form-control textarea { width: 100%; min-height: 39px; border: 1px solid #e1e6e0; border-radius: 6px; padding: 0 11px; background: white; color: #44534a; font-size: 10px; outline: 0; }.form-control textarea { min-height: 82px; resize: vertical; padding: 10px 11px; line-height: 1.55; }.form-control input::placeholder,.form-control textarea::placeholder { color: #a5ada7; font-weight: 400; }.form-control input:focus,.form-control select:focus,.form-control textarea:focus { border-color: #7aaf8a; }.form-control small { color: #98a29b; font-size: 9px; font-weight: 400; margin-top: -3px; }

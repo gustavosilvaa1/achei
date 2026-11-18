@@ -253,3 +253,20 @@ O Achei! tem como objetivo facilitar a localização e a recuperação de objeto
 O MVP prioriza as operações CRUD, permitindo cadastrar, consultar, pesquisar, atualizar e excluir objetos encontrados.
 
 A documentação estabelece uma base inicial para o desenvolvimento, orientando a implementação das funcionalidades e os testes necessários para verificar se o sistema atende às necessidades dos usuários.
+
+12. EXECUÇÃO DO MVP
+
+Pré-requisitos: Node.js LTS e um projeto Supabase.
+
+1. Instale as dependências na pasta do projeto com `npm install`.
+2. Copie `.env.example` para `.env` e preencha `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY` com a URL e a chave publishable do projeto Supabase. Nunca use a chave secret/service_role no navegador.
+3. Execute todo o arquivo `schema.sql` no SQL Editor do projeto Supabase. O script cria as tabelas, índices, políticas RLS, bucket público de fotos e três registros de exemplo. Pode ser executado novamente sem duplicar os registros de exemplo.
+4. No Supabase, crie o usuário da equipe em Authentication > Users. Desative o cadastro público de usuários em Authentication > Settings > Allow new users to sign up.
+5. Autorize o usuário inserindo o perfil pelo SQL Editor. Substitua o UUID e o nome pelos dados do usuário criado:
+
+   `insert into public.perfis (id, nome, papel) values ('UUID-DO-USUARIO', 'Nome da equipe', 'administrador');`
+
+   Para outros integrantes da equipe, use o papel `equipe`. Somente um administrador deve receber o papel `administrador`. Os perfis não podem ser criados ou promovidos pela aplicação.
+6. Inicie o site local com `npm run dev`.
+
+O público pode consultar, pesquisar e abrir detalhes dos achados sem login. As operações administrativas exigem uma conta autenticada com perfil autorizado. A equipe pode cadastrar, editar e atualizar o status; apenas administradores podem excluir registros. Fotos JPG/PNG de até 5 MB são armazenadas no bucket `achados-fotos`.
