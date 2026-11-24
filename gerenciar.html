@@ -29,7 +29,7 @@
     <section class="manage-panel">
       <div class="manage-panel-heading"><div><h2>Todos os registros <span class="table-count">12</span></h2><p>Edite as informações ou atualize o status do objeto.</p></div><label class="table-search"><span class="search-icon" aria-hidden="true"></span><span class="sr-only">Pesquisar nos registros</span><input type="search" placeholder="Buscar objeto..."></label></div>
       <div class="table-filters"><button class="filter-tab active" type="button" data-status="">Todos <span id="count-todos">0</span></button><button class="filter-tab" type="button" data-status="disponivel">Disponíveis <span id="count-disponiveis">0</span></button><button class="filter-tab" type="button" data-status="devolvido">Devolvidos <span id="count-devolvidos">0</span></button><span class="filter-sort">Ordenar: <strong>Mais recentes</strong></span></div>
-      <div class="table-scroll" id="registros"><table class="records-table"><thead><tr><th>OBJETO</th><th>CATEGORIA</th><th>LOCAL ENCONTRADO</th><th>DATA</th><th>STATUS</th><th><span class="sr-only">Ações</span></th></tr></thead><tbody id="achados-gerenciar">
+      <div class="table-scroll" id="registros"><table class="records-table"><thead><tr><th>OBJETO</th><th>CATEGORIA</th><th>LOCAL ENCONTRADO</th><th>DATA</th><th>STATUS</th><th><span class="sr-only">Ações</span></th></tr></thead><tbody id="achados-gerenciar" aria-live="polite" aria-busy="true">
       </tbody></table></div>
       <div class="table-footer"><span id="table-footer-count"></span><div class="pagination"></div></div>
     </section>

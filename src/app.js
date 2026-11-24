@@ -24,6 +24,44 @@ function escapeHtml(value) {
   return div.innerHTML;
 }
 
+function renderGridState(container, message, { isError = false, onRetry } = {}) {
+  container.replaceChildren();
+  const state = document.createElement('p');
+  state.className = `grid-state${isError ? ' is-error' : ''}`;
+  state.setAttribute('role', isError ? 'alert' : 'status');
+  state.textContent = message;
+  container.append(state);
+
+  if (onRetry) {
+    const retry = document.createElement('button');
+    retry.className = 'button button-outline';
+    retry.type = 'button';
+    retry.textContent = 'Tentar novamente';
+    retry.addEventListener('click', onRetry, { once: true });
+    container.append(retry);
+  }
+}
+
+function renderTableState(container, message, { isError = false, onRetry } = {}) {
+  container.replaceChildren();
+  const row = document.createElement('tr');
+  const cell = document.createElement('td');
+  cell.colSpan = 6;
+  cell.className = isError ? 'table-state is-error' : 'table-state';
+  cell.setAttribute('role', isError ? 'alert' : 'status');
+  cell.textContent = message;
+  if (onRetry) {
+    const retry = document.createElement('button');
+    retry.className = 'row-action';
+    retry.type = 'button';
+    retry.textContent = 'Tentar novamente';
+    retry.addEventListener('click', onRetry, { once: true });
+    cell.append(' ', retry);
+  }
+  row.append(cell);
+  container.append(row);
+}
+
 function showMessage(message, isError = false) {
   const alert = document.createElement('div');
   alert.setAttribute('role', isError ? 'alert' : 'status');
@@ -73,10 +111,11 @@ async function getStaffProfile() {
   return { session, profile };
 }
 
-async function getAchados({ category = '', status = '' } = {}) {
+async function getAchados({ category = '', status = '', date = '' } = {}) {
   let query = supabase.from('achados').select(achadoFields).order('criado_em', { ascending: false });
   if (category) query = query.eq('categoria', category);
   if (status) query = query.eq('status', status);
+  if (date) query = query.eq('encontrado_em', date);
   const { data, error } = await query;
   if (error) throw error;
   return data ?? [];
@@ -91,66 +130,107 @@ function renderPhoto(item, className = 'object-photo') {
 
 async function initIndex() {
   const grid = document.querySelector('.object-grid');
-  if (!grid || !supabaseConfigured) return;
+  if (!grid) return;
 
   const params = new URLSearchParams(location.search);
   const search = params.get('q') ?? '';
   const category = params.get('categoria') ?? '';
+  const date = params.get('data') ?? '';
   const input = document.querySelector('input[name="q"]');
   const select = document.querySelector('select[name="categoria"]');
+  const dateInput = document.querySelector('input[name="data"]');
+  const count = document.querySelector('.result-count');
+  const heading = document.querySelector('#achados-titulo');
   if (input) input.value = search;
   if (select) select.value = category;
-
-  try {
-    const allAchados = await getAchados({ category });
-    const normalizedSearch = search.trim().toLocaleLowerCase('pt-BR');
-    const achados = allAchados.filter((item) => !normalizedSearch
-      || `${item.nome} ${item.descricao}`.toLocaleLowerCase('pt-BR').includes(normalizedSearch));
-    const visible = achados.slice(0, pageSize);
-    const count = document.querySelector('.result-count');
-    count?.replaceChildren(String(achados.length));
-
-    const chips = document.querySelectorAll('.category-chip');
-    chips.forEach((chip) => {
-      const chipCategory = new URL(chip.href).searchParams.get('categoria') ?? '';
-      chip.classList.toggle('selected', chipCategory === category);
-      if (chipCategory === '') chip.innerHTML = `Tudo <span>${achados.length}</span>`;
+  if (dateInput) dateInput.value = date;
+  if (heading && date) {
+    const formattedDate = new Date(`${date}T12:00:00`).toLocaleDateString('pt-BR', {
+      day: '2-digit',
+      month: 'long'
     });
-
-    if (!visible.length) {
-      grid.innerHTML = '<p>Nenhum objeto encontrado para esta pesquisa.</p>';
-    } else {
-      grid.innerHTML = visible.map((item) => `
-        <a class="object-card" href="detalhe.html?id=${encodeURIComponent(item.id)}">
-          <div class="object-photo photo-backpack">
-            <span class="photo-badge"><span class="status-dot"></span>${item.status === 'devolvido' ? 'Devolvido' : 'Disponível'}</span>
-            ${renderPhoto(item)}
-            <span class="photo-label">${escapeHtml(item.categoria.toUpperCase())}</span>
-          </div>
-          <div class="object-info">
-            <div class="object-title-row"><h3>${escapeHtml(item.nome)}</h3><span class="card-arrow">↗</span></div>
-            <p>Encontrado em ${escapeHtml(item.local)}</p>
-            <div class="object-meta"><span>◷ &nbsp;${formatDate(item.encontrado_em)}</span><span class="meta-category">${escapeHtml(item.categoria)}</span></div>
-          </div>
-        </a>`).join('');
-    }
-
-    const loadMore = document.querySelector('.load-more');
-    if (loadMore) loadMore.hidden = achados.length <= pageSize;
-    const loadButton = document.querySelector('#carregar-mais');
-    if (loadButton) {
-      loadButton.onclick = () => {
-        grid.innerHTML = achados.map((item) => `
-          <a class="object-card" href="detalhe.html?id=${encodeURIComponent(item.id)}">
-            <div class="object-photo photo-backpack"><span class="photo-badge"><span class="status-dot"></span>${item.status === 'devolvido' ? 'Devolvido' : 'Disponível'}</span>${renderPhoto(item)}<span class="photo-label">${escapeHtml(item.categoria.toUpperCase())}</span></div>
-            <div class="object-info"><div class="object-title-row"><h3>${escapeHtml(item.nome)}</h3><span class="card-arrow">↗</span></div><p>Encontrado em ${escapeHtml(item.local)}</p><div class="object-meta"><span>◷ &nbsp;${formatDate(item.encontrado_em)}</span><span class="meta-category">${escapeHtml(item.categoria)}</span></div></div>
-          </a>`).join('');
-        loadMore.hidden = true;
-      };
-    }
-  } catch (error) {
-    showMessage(`Não foi possível carregar os achados: ${error.message}`, true);
+    heading.firstChild.textContent = `Achados de ${formattedDate} `;
   }
+  if (!supabaseConfigured) {
+    renderGridState(grid, 'Configure o Supabase para consultar os achados.', { isError: true });
+    grid.setAttribute('aria-busy', 'false');
+    return;
+  }
+
+  const loadMore = document.querySelector('.load-more');
+  const loadButton = document.querySelector('#carregar-mais');
+  let achados = [];
+  let visibleCount = pageSize;
+
+  function renderCards() {
+    const visible = achados.slice(0, visibleCount);
+    grid.innerHTML = visible.map((item) => `
+      <a class="object-card" href="detalhe.html?id=${encodeURIComponent(item.id)}">
+        <div class="object-photo photo-backpack">
+          <span class="photo-badge"><span class="status-dot"></span>Disponível</span>
+          ${renderPhoto(item)}
+          <span class="photo-label">${escapeHtml(item.categoria.toUpperCase())}</span>
+        </div>
+        <div class="object-info">
+          <div class="object-title-row"><h3>${escapeHtml(item.nome)}</h3><span class="card-arrow">↗</span></div>
+          <p>Encontrado em ${escapeHtml(item.local)}</p>
+          <div class="object-meta"><span>◷ &nbsp;${formatDate(item.encontrado_em)}</span><span class="meta-category">${escapeHtml(item.categoria)}</span></div>
+        </div>
+      </a>`).join('');
+    if (loadMore) loadMore.hidden = achados.length <= visibleCount;
+  }
+
+  if (loadButton) {
+    loadButton.onclick = () => {
+      visibleCount += pageSize;
+      renderCards();
+    };
+  }
+
+  async function loadResults() {
+    grid.setAttribute('aria-busy', 'true');
+    renderGridState(grid, 'Carregando achados...');
+    if (count) count.textContent = '0';
+    try {
+      const allAchados = await getAchados({ category, status: 'disponivel', date });
+      const normalizedSearch = search.trim().toLocaleLowerCase('pt-BR');
+      achados = allAchados.filter((item) => !normalizedSearch
+        || `${item.nome} ${item.descricao}`.toLocaleLowerCase('pt-BR').includes(normalizedSearch));
+      visibleCount = pageSize;
+      if (count) count.textContent = String(achados.length);
+
+      document.querySelectorAll('.category-chip').forEach((chip) => {
+        const chipCategory = new URL(chip.href).searchParams.get('categoria') ?? '';
+        const chipUrl = new URL(chip.href);
+        if (search) chipUrl.searchParams.set('q', search);
+        else chipUrl.searchParams.delete('q');
+        if (date) chipUrl.searchParams.set('data', date);
+        else chipUrl.searchParams.delete('data');
+        if (chipCategory) chipUrl.searchParams.set('categoria', chipCategory);
+        else chipUrl.searchParams.delete('categoria');
+        chip.href = `${chipUrl.pathname.split('/').pop()}${chipUrl.search}`;
+        chip.classList.toggle('selected', chipCategory === category);
+        if (chipCategory === '') chip.innerHTML = `Tudo <span>${achados.length}</span>`;
+      });
+
+      if (!achados.length) {
+        renderGridState(grid, 'Nenhum achado disponível corresponde a estes filtros.');
+        if (loadMore) loadMore.hidden = true;
+        return;
+      }
+      renderCards();
+    } catch (error) {
+      renderGridState(grid, `Não foi possível carregar os achados: ${error.message}`, {
+        isError: true,
+        onRetry: loadResults
+      });
+      if (loadMore) loadMore.hidden = true;
+    } finally {
+      grid.setAttribute('aria-busy', 'false');
+    }
+  }
+
+  await loadResults();
 }
 
 async function uploadPhoto(file, userId) {
@@ -172,8 +252,23 @@ async function uploadPhoto(file, userId) {
 async function initCadastro() {
   const form = document.querySelector('#cadastro-achado');
   if (!form) return;
+  const feedback = document.querySelector('#form-feedback');
+  const setFeedback = (message, isError = false) => {
+    if (!feedback) {
+      showMessage(message, isError);
+      return;
+    }
+    feedback.textContent = message;
+    feedback.classList.toggle('is-error', isError);
+    feedback.hidden = !message;
+  };
+  const disableSubmit = () => {
+    const button = form.querySelector('button[type="submit"]');
+    if (button) button.disabled = true;
+  };
   if (!supabaseConfigured) {
-    showMessage('Configure VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY no arquivo .env.', true);
+    setFeedback('Configure VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY no arquivo .env.', true);
+    disableSubmit();
     return;
   }
 
@@ -181,22 +276,32 @@ async function initCadastro() {
   try {
     staff = await getStaffProfile();
   } catch (error) {
-    showMessage(`Não foi possível validar o acesso: ${error.message}`, true);
-    location.href = 'gerenciar.html';
+    setFeedback(`Não foi possível validar o acesso: ${error.message}`, true);
+    disableSubmit();
     return;
   }
   if (!staff.session || !staff.profile) {
-    showMessage('Entre com uma conta autorizada da equipe.');
+    setFeedback('Entre com uma conta autorizada da equipe para cadastrar achados.', true);
     location.href = 'gerenciar.html';
     return;
   }
   setStaffHeader(staff.profile);
 
+  const dateInput = form.elements.data;
+  const today = new Date();
+  const defaultDate = [
+    today.getFullYear(),
+    String(today.getMonth() + 1).padStart(2, '0'),
+    String(today.getDate()).padStart(2, '0')
+  ].join('-');
+  dateInput.value = defaultDate;
+
   const editId = new URLSearchParams(location.search).get('editar');
   if (editId) {
     const { data, error } = await supabase.from('achados').select(achadoFields).eq('id', editId).single();
     if (error) {
-      showMessage(`Não foi possível carregar este achado: ${error.message}`, true);
+      setFeedback(`Não foi possível carregar este achado: ${error.message}`, true);
+      disableSubmit();
       return;
     }
     form.elements.nome.value = data.nome;
@@ -215,10 +320,31 @@ async function initCadastro() {
     if (photoName) photoName.textContent = file?.name ?? 'JPG ou PNG · até 5 MB';
   });
 
+  const nameInput = form.elements.nome;
+  const descriptionInput = form.elements.descricao;
+  const locationInput = form.elements.local;
+  [nameInput, descriptionInput, locationInput].forEach((input) => {
+    input.addEventListener('input', () => input.setCustomValidity(''));
+    input.addEventListener('change', () => input.setCustomValidity(''));
+  });
+
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
     const button = form.querySelector('button[type="submit"]');
+    nameInput.setCustomValidity(nameInput.value.trim().length < 3
+      ? 'Informe um nome com pelo menos 3 caracteres.'
+      : '');
+    descriptionInput.setCustomValidity(descriptionInput.value.trim().length < 10
+      ? 'Informe uma descrição com pelo menos 10 caracteres.'
+      : '');
+    locationInput.setCustomValidity(locationInput.value.trim().length < 2
+      ? 'Informe o local onde o objeto foi encontrado.'
+      : '');
+    if (!form.reportValidity()) return;
+
     button.disabled = true;
+    button.textContent = 'Salvando...';
+    form.setAttribute('aria-busy', 'true');
     let uploadedPhoto = null;
     try {
       const values = Object.fromEntries(new FormData(form));
@@ -243,14 +369,30 @@ async function initCadastro() {
         });
       const { error } = await operation;
       if (error) throw error;
-      showMessage(editId ? 'Achado atualizado com sucesso.' : 'Achado cadastrado com sucesso.');
-      setTimeout(() => { location.href = 'gerenciar.html'; }, 500);
-    } catch (error) {
-      if (uploadedPhoto) {
-        await supabase.storage.from('achados-fotos').remove([uploadedPhoto.path]);
+      setFeedback(editId ? 'Achado atualizado com sucesso.' : 'Achado cadastrado com sucesso.');
+      if (!editId) {
+        form.reset();
+        dateInput.value = defaultDate;
+        if (photoName) photoName.textContent = 'JPG ou PNG · até 5 MB';
+        [nameInput, descriptionInput, locationInput].forEach((input) => input.setCustomValidity(''));
       }
-      showMessage(`Não foi possível salvar o achado: ${error.message}`, true);
+    } catch (error) {
+      let message = `Não foi possível salvar o achado: ${error.message}`;
+      if (uploadedPhoto) {
+        try {
+          const { error: cleanupError } = await supabase.storage.from('achados-fotos').remove([uploadedPhoto.path]);
+          if (cleanupError) message += ` Também não foi possível remover a foto enviada: ${cleanupError.message}`;
+        } catch (cleanupError) {
+          message += ` Também não foi possível remover a foto enviada: ${cleanupError.message}`;
+        }
+      }
+      setFeedback(message, true);
+    } finally {
       button.disabled = false;
+      button.innerHTML = editId
+        ? 'Salvar alterações <span aria-hidden="true">→</span>'
+        : 'Publicar achado <span aria-hidden="true">→</span>';
+      form.setAttribute('aria-busy', 'false');
     }
   });
 }
@@ -317,12 +459,24 @@ async function initGerenciar() {
   await loadTable();
 
   async function loadTable() {
-    const { data, error } = await supabase
-      .from('achados')
-      .select(achadoFields)
-      .order('criado_em', { ascending: false });
+    tbody.setAttribute('aria-busy', 'true');
+    renderTableState(tbody, 'Carregando achados...');
+    let data;
+    let error;
+    try {
+      ({ data, error } = await supabase
+        .from('achados')
+        .select(achadoFields)
+        .order('criado_em', { ascending: false }));
+    } catch (requestError) {
+      error = requestError;
+    }
     if (error) {
-      showMessage(`Erro ao carregar registros: ${error.message}`, true);
+      renderTableState(tbody, `Erro ao carregar registros: ${error.message}`, {
+        isError: true,
+        onRetry: loadTable
+      });
+      tbody.setAttribute('aria-busy', 'false');
       return;
     }
     const rows = data ?? [];
@@ -345,7 +499,10 @@ async function initGerenciar() {
     });
     document.querySelector('#table-footer-count').textContent = `Mostrando ${filtered.length} de ${rows.length} registros`;
     if (!filtered.length) {
-      tbody.innerHTML = '<tr><td colspan="6">Nenhum registro corresponde à pesquisa.</td></tr>';
+      renderTableState(tbody, rows.length
+        ? 'Nenhum registro corresponde à pesquisa.'
+        : 'Ainda não há achados cadastrados.');
+      tbody.setAttribute('aria-busy', 'false');
       return;
     }
 
@@ -383,19 +540,48 @@ async function initGerenciar() {
         }
       });
     });
+    tbody.setAttribute('aria-busy', 'false');
   }
 }
 
 async function initDetalhe() {
   if (!location.pathname.endsWith('detalhe.html')) return;
-  const id = new URLSearchParams(location.search).get('id');
-  if (!supabaseConfigured || !id) return;
-  const { data, error } = await supabase.from('achados').select(achadoFields).eq('id', id).single();
-  if (error) {
-    showMessage(`Não foi possível abrir este achado: ${error.message}`, true);
+  const state = document.querySelector('#detalhe-state');
+  const layout = document.querySelector('.detail-layout');
+  if (!state || !layout) return;
+
+  function showDetailState(message, isError = false) {
+    state.textContent = message;
+    state.className = `detail-state${isError ? ' is-error' : ''}`;
+    state.setAttribute('role', isError ? 'alert' : 'status');
+    state.hidden = false;
+    layout.hidden = true;
+  }
+
+  showDetailState('Carregando os detalhes do achado...');
+  if (!supabaseConfigured) {
+    showDetailState('Configure o Supabase para consultar este achado.', true);
     return;
   }
 
+  const id = new URLSearchParams(location.search).get('id');
+  if (!id) {
+    showDetailState('Não foi informado qual achado deve ser exibido.', true);
+    return;
+  }
+
+  let data;
+  try {
+    const result = await supabase.from('achados').select(achadoFields).eq('id', id).single();
+    if (result.error) throw result.error;
+    data = result.data;
+  } catch (error) {
+    showDetailState(`Não foi possível abrir este achado: ${error.message}`, true);
+    return;
+  }
+
+  state.hidden = true;
+  layout.hidden = false;
   document.title = `${data.nome} — Achei!`;
   document.querySelector('#detalhe-nome').textContent = data.nome;
   document.querySelector('.detail-description').textContent = data.descricao;
@@ -420,14 +606,20 @@ async function initDetalhe() {
     emoji.textContent = categoryEmoji[data.categoria] ?? '📦';
   }
   if (data.status === 'devolvido') {
+    const badge = document.querySelector('.detail-photo .photo-badge');
+    if (badge) {
+      badge.classList.add('is-returned');
+      badge.innerHTML = '<span class="status-dot"></span>Devolvido';
+    }
     document.querySelector('.claim-card')?.remove();
     document.querySelector('.button-wide')?.remove();
+  } else {
+    const badge = document.querySelector('.detail-photo .photo-badge');
+    if (badge) badge.innerHTML = '<span class="status-dot"></span>Disponível para retirada';
   }
 }
 
-if (supabaseConfigured) {
-  initIndex();
-  initCadastro();
-  initGerenciar();
-  initDetalhe();
-}
+initIndex();
+initCadastro();
+initGerenciar();
+initDetalhe();

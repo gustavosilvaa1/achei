@@ -21,17 +21,17 @@
         <section class="form-section">
           <div class="form-section-heading"><span class="form-step">01</span><div><h2>Sobre o objeto</h2><p>As informações ajudam a identificar o item.</p></div></div>
           <div class="form-fields">
-            <label class="form-control full-width">Nome do objeto <span class="required">*</span><input type="text" name="nome" placeholder="Ex.: Guarda-chuva preto" required><small>Use um nome simples e fácil de reconhecer.</small></label>
+            <label class="form-control full-width">Nome do objeto <span class="required">*</span><input type="text" name="nome" minlength="3" maxlength="120" placeholder="Ex.: Guarda-chuva preto" required><small>Use um nome simples e fácil de reconhecer.</small></label>
             <label class="form-control">Categoria <span class="required">*</span><select name="categoria" required><option value="" disabled selected>Selecione uma categoria</option><option>Eletrônicos</option><option>Acessórios</option><option>Material escolar</option><option>Outros</option></select></label>
-            <label class="form-control">Data em que foi encontrado <span class="required">*</span><input type="date" name="data" value="2026-11-13" required></label>
-            <label class="form-control full-width">Descrição <span class="required">*</span><textarea name="descricao" rows="4" placeholder="Cor, tamanho, marca, detalhes que ajudem a identificar..." required></textarea><small>Evite incluir nomes ou outras informações pessoais.</small></label>
+            <label class="form-control">Data em que foi encontrado <span class="required">*</span><input type="date" name="data" required></label>
+            <label class="form-control full-width">Descrição <span class="required">*</span><textarea name="descricao" minlength="10" maxlength="2000" rows="4" placeholder="Cor, tamanho, marca, detalhes que ajudem a identificar..." required></textarea><small>Evite incluir nomes ou outras informações pessoais.</small></label>
           </div>
         </section>
         <section class="form-section location-section">
           <div class="form-section-heading"><span class="form-step">02</span><div><h2>Onde foi encontrado?</h2><p>Ajude a pessoa a entender onde deixou o objeto.</p></div></div>
           <div class="form-fields">
             <label class="form-control">Local <span class="required">*</span><select name="local" required><option value="" disabled selected>Selecione o local</option><option>Biblioteca central</option><option>Bloco de aulas A</option><option>Bloco de aulas B</option><option>Cantina</option><option>Ginásio</option><option>Outro</option></select></label>
-            <label class="form-control">Complemento <span class="optional">(opcional)</span><input type="text" name="complemento" placeholder="Ex.: 1º andar, sala 12"></label>
+            <label class="form-control">Complemento <span class="optional">(opcional)</span><input type="text" name="complemento" maxlength="160" placeholder="Ex.: 1º andar, sala 12"></label>
           </div>
         </section>
         <section class="form-section">
@@ -39,6 +39,7 @@
           <label class="upload-box"><span class="upload-icon">↑</span><span><strong>Adicionar uma foto</strong><small id="foto-nome">JPG ou PNG · até 5 MB</small></span><input type="file" name="foto" accept="image/png,image/jpeg" aria-label="Adicionar uma foto do objeto"></label>
           <p class="upload-privacy">Antes de publicar, confira se a imagem não mostra informações pessoais.</p>
         </section>
+        <p class="form-feedback" id="form-feedback" role="status" aria-live="polite" hidden></p>
         <div class="form-actions"><span><span class="required">*</span> Campos obrigatórios</span><button class="button button-primary" type="submit">Publicar achado <span aria-hidden="true">→</span></button></div>
       </form>
       <aside class="form-aside">

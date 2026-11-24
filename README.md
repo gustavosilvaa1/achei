@@ -270,3 +270,36 @@ Pré-requisitos: Node.js LTS e um projeto Supabase.
 6. Inicie o site local com `npm run dev`.
 
 O público pode consultar, pesquisar e abrir detalhes dos achados sem login. As operações administrativas exigem uma conta autenticada com perfil autorizado. A equipe pode cadastrar, editar e atualizar o status; apenas administradores podem excluir registros. Fotos JPG/PNG de até 5 MB são armazenadas no bucket `achados-fotos`.
+
+13. INTEGRAÇÃO FRONT-END ADAPTADA AO ACHEI!
+
+O roteiro de integração foi adaptado ao domínio de achados e perdidos e à estrutura já existente do projeto (Vite, HTML, CSS e JavaScript). Não há agendamento de retirada nem coleta de contato pessoal: a confirmação e a retirada do objeto continuam sendo feitas presencialmente com a equipe.
+
+| Tela do Achei! | Fluxo integrado |
+|---|---|
+| `index.html` — Achados | Consulta pública de objetos disponíveis, busca por nome/descrição, categoria e data em que foram encontrados; apresenta carregamento, lista vazia e erro com opção de tentar novamente. |
+| `cadastro.html` — Cadastro | Formulário da equipe, validação de campos, envio de foto opcional e `INSERT` em `public.achados`; apresenta feedback de sucesso ou erro. |
+| `detalhe.html` — Detalhes | Consulta de um objeto pelo identificador; informa localização e como confirmar a propriedade presencialmente, sem solicitar dados pessoais. |
+| `gerenciar.html` — Gerenciamento | Acesso autenticado para listar, pesquisar, editar e atualizar status; exclusão restrita a administradores; apresenta carregamento, lista vazia e erro. |
+
+O filtro por data na lista pública é a adaptação da “agenda do dia”: ele consulta `encontrado_em` e exibe os achados daquela data em grade. Os padrões visuais reutilizáveis correspondem a botões (`.button`), campos (`.form-control`), cartões (`.object-card`/`.aside-card`) e badges de status (`.photo-badge`).
+
+#### Capturas das telas
+
+As capturas abaixo foram feitas em 1280 px usando os dados de exemplo do `schema.sql`. As telas de cadastro e gerenciamento exigem uma sessão autenticada de equipe.
+
+![Lista pública de achados](./screenshots/01-lista.png)
+
+![Cadastro de achado](./screenshots/02-cadastro.png)
+
+![Detalhes do achado](./screenshots/03-detalhes.png)
+
+![Gerenciamento de achados](./screenshots/04-gerenciar.png)
+
+#### Testes executados
+
+- `npm run build` e `git diff --check`: passaram.
+- Navegador: lista, filtros de data/categoria, detalhe válido, detalhe inexistente, estados vazio e erro/retry, login da equipe.
+- Supabase autenticado: validação bloqueou nome em branco; `INSERT`, edição, alteração de status e `DELETE` passaram. O registro temporário de teste foi removido; os três registros de exemplo permaneceram.
+- Responsividade nas quatro telas: sem rolagem horizontal em 375 px, 768 px e 1280 px.
+- `node --test`: não há testes automatizados cadastrados no repositório.

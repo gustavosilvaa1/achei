@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#f7f8f6">
-  <title>Mochila azul-marinho — Achei!</title>
+  <title>Detalhes do achado — Achei!</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -15,7 +15,8 @@
   </header>
   <main class="detail-main">
     <a class="back-link" href="index.html">← <span>Voltar para os achados</span></a>
-    <div class="detail-layout">
+    <p class="detail-state" id="detalhe-state" role="status" aria-live="polite">Carregando os detalhes do achado...</p>
+    <div class="detail-layout" hidden>
       <section class="detail-visual" aria-label="Imagem ilustrativa de uma mochila">
         <div class="detail-photo photo-backpack"><span class="photo-badge"><span class="status-dot"></span> Disponível para retirada</span><span class="detail-emoji" aria-hidden="true">🎒</span><span class="detail-spark">✳</span></div>
         <div class="image-caption"><span>📷</span> Imagem ilustrativa do objeto</div>

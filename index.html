@@ -38,6 +38,7 @@
       <form class="search-form" action="index.html">
         <label class="search-field"><span class="search-icon" aria-hidden="true"></span><span class="sr-only">Buscar por objeto</span><input type="search" name="q" placeholder="O que você está procurando?" autocomplete="off"></label>
         <label class="select-field"><span class="sr-only">Categoria</span><select name="categoria"><option value="">Todas as categorias</option><option>Eletrônicos</option><option>Acessórios</option><option>Material escolar</option><option>Outros</option></select></label>
+        <label class="date-field"><span class="sr-only">Data em que foi encontrado</span><input type="date" name="data" aria-label="Filtrar achados pela data em que foram encontrados"></label>
         <button class="button button-primary search-button" type="submit">Buscar <span aria-hidden="true">→</span></button>
       </form>
       <div class="popular-searches"><span>Em alta:</span><a href="#objetos">chaves</a><a href="#objetos">garrafa</a><a href="#objetos">fone de ouvido</a></div>
@@ -45,13 +46,13 @@
 
     <section class="results-section" id="objetos">
       <div class="section-heading">
-        <div><span class="eyebrow">O QUE JÁ FOI ENCONTRADO</span><h2>Achados recentes <span class="result-count">12</span></h2></div>
+        <div><span class="eyebrow">O QUE JÁ FOI ENCONTRADO</span><h2 id="achados-titulo">Achados recentes <span class="result-count" aria-live="polite">0</span></h2></div>
         <a class="text-link" href="#objetos">Ver todos <span aria-hidden="true">→</span></a>
       </div>
       <div class="category-row" aria-label="Filtrar por categoria">
         <a class="category-chip selected" href="index.html">Tudo</a><a class="category-chip" href="index.html?categoria=Eletr%C3%B4nicos">Eletrônicos</a><a class="category-chip" href="index.html?categoria=Acess%C3%B3rios">Acessórios</a><a class="category-chip" href="index.html?categoria=Material%20escolar">Material escolar</a><a class="category-chip" href="index.html?categoria=Outros">Outros</a>
       </div>
-      <div class="object-grid">
+      <div class="object-grid" aria-live="polite" aria-busy="true">
         <a class="object-card" href="detalhe.html">
           <div class="object-photo photo-backpack"><span class="photo-badge"><span class="status-dot"></span> Disponível</span><span class="object-emoji" aria-hidden="true">🎒</span><span class="photo-label">MATERIAL ESCOLAR</span></div>
           <div class="object-info"><div class="object-title-row"><h3>Mochila azul-marinho</h3><span class="card-arrow">↗</span></div><p>Encontrada na biblioteca central</p><div class="object-meta"><span>◷ &nbsp;Hoje, 10:42</span><span class="meta-category">Mochilas</span></div></div>
